@@ -1,6 +1,6 @@
 # 🚌 TransitIQ — Smart Public Transport Feedback & Delay Analysis Portal
 
-A full-stack final-year project built with **React 18 (Vite)** + **Node.js (Express)** + **MongoDB** — featuring an **AI-powered Commute Companion** driven by OpenAI GPT-4o-mini.
+A full-stack project built with **React 18 (Vite)** + **Node.js (Express)** + **MongoDB** — featuring an **AI-powered Commute Companion** driven by OpenAI GPT-4o-mini.
 
 ---
 
@@ -20,6 +20,7 @@ A full-stack final-year project built with **React 18 (Vite)** + **Node.js (Expr
 ```
 transport-portal/
 ├── README.md
+|── ui/                    # Screenshots of website
 ├── backend/
 │   ├── middleware/        auth.js (JWT + adminOnly)
 │   ├── models/            User, Route, Stop, Bus, Feedback, DelayReport
@@ -217,28 +218,4 @@ The AI Companion is a standout feature that sets TransitIQ apart from generic tr
 
 ---
 
-## 📜 MongoDB Commands
 
-// List all databases
-show dbs
-
-// Use your project's database
-use transport_portal
-
-// List collections
-show collections
-
-// View all documents in a collection
-db.users.find().pretty()
-db.feedbacks.find().pretty()
-db.delayreports.find().pretty()
-db.routes.find().pretty()
-
-// Count documents
-db.users.countDocuments()
-
-// Find specific document
-db.users.findOne({ email: "admin@transit.com" })
-
-// Find with filter
-db.feedbacks.find({ status: "pending" }).pretty()
