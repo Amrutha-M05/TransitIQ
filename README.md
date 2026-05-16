@@ -12,6 +12,7 @@ A full-stack final-year project built with **React 18 (Vite)** + **Node.js (Expr
 - 🤖 **AI Commute Companion** — Personalized, GPT-powered chat assistant that analyzes each user's travel history to provide pattern insights, travel tips, and smart suggestions
 - 📋 **Live Delay Board** — Public, real-time delay board viewable without login
 - 🔐 **Role-Based Access** — JWT authentication with `passenger` and `admin` roles
+- 🔑 **Forgot Password** — Secure token-based password reset flow with 1-hour expiry and password strength enforcement
 
 ---
 
@@ -20,6 +21,7 @@ A full-stack final-year project built with **React 18 (Vite)** + **Node.js (Expr
 ```
 transport-portal/
 ├── README.md
+├── ui/                    # Screenshots of project
 ├── backend/
 │   ├── middleware/        auth.js (JWT + adminOnly)
 │   ├── models/            User, Route, Stop, Bus, Feedback, DelayReport
@@ -32,13 +34,18 @@ transport-portal/
 └── frontend/
     └── src/
         ├── components/
-        │   ├── Layout.jsx        (Passenger layout)
-        │   ├── AdminLayout.jsx   (Admin sidebar layout)
-        │   └── ui/CrudTable.jsx  (Reusable CRUD table)
+        │   ├── Layout.jsx              (Passenger layout)
+        │   ├── AdminLayout.jsx         (Admin sidebar layout)
+        │   └── ui/
+        │       ├── CrudTable.jsx       (Reusable CRUD table)
+        │       ├── Modal.jsx           (Reusable modal dialog)
+        │       ├── PasswordStrengthMeter.jsx
+        │       ├── StarRating.jsx      (Star rating input)
+        │       └── Toast.jsx           (Toast notifications)
         ├── context/       AuthContext.jsx
         ├── pages/
         │   ├── public/    Landing, DelayBoard
-        │   ├── auth/      Login, Signup
+        │   ├── auth/      Login, Signup, ForgotPassword, ResetPassword
         │   ├── passenger/ Dashboard, SubmitFeedback, ReportDelay,
         │   │              MySubmissions, Profile, AICompanion
         │   └── admin/     Dashboard, ManageRoutes, ManageStops,
@@ -91,7 +98,6 @@ This creates:
 cd frontend
 npm install
 npm run dev -- --host
-npm run build
 ```
 
 The frontend runs on: `http://localhost:5173`
@@ -122,12 +128,14 @@ OPENAI_PROJECT_ID=proj_your-project-id-here
 
 ### Auth
 
-| Method | Endpoint           | Auth     | Description      |
-| ------ | ------------------ | -------- | ---------------- |
-| POST   | /api/auth/signup   | ❌       | Register user    |
-| POST   | /api/auth/login    | ❌       | Login            |
-| GET    | /api/auth/me       | ✅       | Get current user |
-| PATCH  | /api/auth/me       | ✅       | Update profile   |
+| Method | Endpoint                    | Auth     | Description            |
+| ------ | --------------------------- | -------- | ---------------------- |
+| POST   | /api/auth/signup            | ❌       | Register user          |
+| POST   | /api/auth/login             | ❌       | Login                  |
+| GET    | /api/auth/me                | ✅       | Get current user       |
+| PATCH  | /api/auth/me                | ✅       | Update profile         |
+| POST   | /api/auth/forgot-password   | ❌       | Request password reset |
+| POST   | /api/auth/reset-password    | ❌       | Reset with token       |
 
 ### Feedback
 
