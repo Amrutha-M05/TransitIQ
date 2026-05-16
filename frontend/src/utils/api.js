@@ -1,5 +1,5 @@
-const BASE = '/api';
-
+//const BASE = '/api';
+const BASE = import.meta.env.VITE_API_URL;
 const getHeaders = (isFormData = false) => {
   const token = localStorage.getItem('token');
   const h = { Authorization: `Bearer ${token}` };
@@ -13,8 +13,21 @@ const req = async (method, path, body, isFormData = false) => {
     headers: getHeaders(isFormData),
     body: body ? (isFormData ? body : JSON.stringify(body)) : undefined
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Request failed');
+
+  const text = await res.text(); // read raw response first
+
+  let data;
+  try {
+    data = JSON.parse(text); // try JSON parse
+  } catch (err) {
+    console.error("❌ Non-JSON response from server:", text);
+    throw new Error("Server error or invalid response");
+  }
+
+  if (!res.ok) {
+    throw new Error(data.message || 'Request failed');
+  }
+
   return data;
 };
 
