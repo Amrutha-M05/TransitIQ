@@ -7,28 +7,8 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (e.g. mobile apps, curl, Postman)
-    if (!origin) return callback(null, true);
-    // Allow all Vercel preview/production deployments for your project
-    const allowed = [
-      /^https:\/\/transit-iq.*\.vercel\.app$/,
-      /^https:\/\/transit-iq-f7gy.*-amrutha-m05s-projects\.vercel\.app$/,
-      'http://localhost:5173',
-      'http://localhost:3000'
-    ];
-    const isAllowed = allowed.some(pattern =>
-      pattern instanceof RegExp ? pattern.test(origin) : pattern === origin
-    );
-    if (isAllowed) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
+/ Middleware
+app.use(cors({ origin: 'https://transit-iq-f7gy-8icge1mxi-amrutha-m05s-projects.vercel.app/', credentials: true }));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
