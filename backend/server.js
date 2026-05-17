@@ -7,8 +7,16 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-/ Middleware
-app.use(cors({ origin: 'https://transit-iq-f7gy-8icge1mxi-amrutha-m05s-projects.vercel.app/', credentials: true }));
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (origin.includes('vercel.app') || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
+    }
+    callback(new Error('Not allowed by CORS: ' + origin));
+  },
+  credentials: true
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -22,6 +30,7 @@ app.use('/api/buses', require('./routes/buses'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/ai-companion', require('./routes/aiCompanion'));
+app.use('/api/seed', require('./routes/seed'));
 
 // Connect DB
 mongoose.connect(process.env.MONGO_URI)
