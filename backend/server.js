@@ -33,6 +33,12 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/ai-companion', require('./routes/aiCompanion'));
 app.use('/api/seed', require('./routes/seed'));
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ message: err.message || 'Internal Server Error' });
+});
+
 // Connect DB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

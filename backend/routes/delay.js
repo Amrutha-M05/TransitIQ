@@ -25,29 +25,33 @@ router.get('/my', auth, async (req, res) => {
   res.json(reports);
 });
 
-router.get('/public', async (req, res) => {
-  const { route, stop } = req.query;
-  const filter = { status: { $in: ['new', 'verified'] } };
-  
-  let reports = await DelayReport.find(filter)
-    .populate('routeId', 'routeCode routeName')
-    .populate('stopId', 'stopName')
-    .populate('userId', 'name')
-    .sort({ createdAt: -1 })
-    .limit(50);
+router.get('/public', async (req, res, next) => {
+  try {
+    const { route, stop } = req.query;
+    const filter = { status: { $in: ['new', 'verified'] } };
+    
+    let reports = await DelayReport.find(filter)
+      .populate('routeId', 'routeCode routeName')
+      .populate('stopId', 'stopName')
+      .populate('userId', 'name')
+      .sort({ createdAt: -1 })
+      .limit(50);
 
-  if (route) {
-    reports = reports.filter(r => 
-      r.routeId?.routeCode?.toLowerCase().includes(route.toLowerCase()) ||
-      r.routeId?.routeName?.toLowerCase().includes(route.toLowerCase())
-    );
+    if (route) {
+      reports = reports.filter(r => 
+        r.routeId?.routeCode?.toLowerCase().includes(route.toLowerCase()) ||
+        r.routeId?.routeName?.toLowerCase().includes(route.toLowerCase())
+      );
+    }
+    if (stop) {
+      reports = reports.filter(r => 
+        r.stopId?.stopName?.toLowerCase().includes(stop.toLowerCase())
+      );
+    }
+    res.json(reports);
+  } catch (err) {
+    next(err);
   }
-  if (stop) {
-    reports = reports.filter(r => 
-      r.stopId?.stopName?.toLowerCase().includes(stop.toLowerCase())
-    );
-  }
-  res.json(reports);
 });
 
 router.get('/', auth, adminOnly, async (req, res) => {
